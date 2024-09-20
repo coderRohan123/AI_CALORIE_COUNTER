@@ -3,6 +3,8 @@
 
 ### 1. Detecting Single Food Item:
 The system successfully identified a single apple from the image and provided detailed nutritional information
+
+!(images/single apple.png)
 #### Outcome:
 ##### The AI Calorie Counter correctly identified the food item and matched the nutritional data with high accuracy.
 
