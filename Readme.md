@@ -3,15 +3,15 @@
 
 ### 1. Detecting Single Food Item:
 The system successfully identified a single apple from the image and provided detailed nutritional information
-Outcome:
-#### The AI Calorie Counter correctly identified the food item and matched the nutritional data with high accuracy.
+#### Outcome:
+##### The AI Calorie Counter correctly identified the food item and matched the nutritional data with high accuracy.
 
                                                               
 
 ### 2. Detecting Multiple Food Items:
 In this test, the system analyzed an image containing 3 apples  
-Outcome:
-#### The system accurately identified each apple and gave total calorie 
+#### Outcome:
+##### The system accurately identified each apple and gave total calorie 
 
 
  
@@ -22,8 +22,8 @@ Outcome:
 
 ### 3. Identifying Packaged Foods:
 The system was tested with an image of a packaged food item, such as a coke zero. It utilized OCR (Optical Character Recognition) to read the nutritional label and cross-checked it with the database.
-Outcome:
-#### The AI Calorie Counter accurately read the nutritional label and provided correct nutritional information.
+#### Outcome:
+##### The AI Calorie Counter accurately read the nutritional label and provided correct nutritional information.
 
 
                                                          
@@ -39,8 +39,9 @@ Outcome:
 
 ### 4. Handling Complex Dishes:
 The system analyzed an image of a complex dish like a local indian dish with various ingredients
-Outcome:
-#### The AI Calorie Counter was able to identify dish name and total calories
+
+#### Outcome:
+##### The AI Calorie Counter was able to identify dish name and total calories
                                                             
 
 
