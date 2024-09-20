@@ -62,6 +62,7 @@ The system analyzed an image of a complex dish like a local indian dish with var
 
 ### 5. Real-time Analysis and Reporting:
 The system was tested for its real-time analysis capabilities where users took a picture of his homemade food and uploaded it to the system, images in real-time, and the system provided immediate nutritional information.
-Outcome:![Uploading real time maggi.png…]()
+Outcome:![real time maggi](https://github.com/user-attachments/assets/9691aaf4-2628-43cb-9712-f04762192e52)
+
 
 #### The AI Calorie Counter provided real-time nutritional data with a response time of less than 3 seconds per image.                        
