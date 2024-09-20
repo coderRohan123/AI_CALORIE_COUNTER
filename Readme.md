@@ -5,8 +5,7 @@ The system successfully identified a single apple from the image and provided de
 Outcome:
 •	The AI Calorie Counter correctly identified the food item and matched the nutritional data with high accuracy.
 
-                                                                  
-![IDLI](https://github.com/user-attachments/assets/1e46685c-3b2b-4128-8d13-f3bed6b4e719)
+                                                              
 
 ### 2. Detecting Multiple Food Items:
 In this test, the system analyzed an image containing 3 apples  
