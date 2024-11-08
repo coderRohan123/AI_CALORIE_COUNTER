@@ -6,6 +6,9 @@ import streamlit as st
 import google.generativeai as genai
 from PIL import Image
 
+# Set page configuration first
+st.set_page_config(page_title="AI Nutritionist App", layout="wide", initial_sidebar_state="expanded")
+
 # Load the .env file
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
@@ -29,18 +32,19 @@ def input_image_setup(uploaded_file):
         raise FileNotFoundError("No file uploaded")
 
 # Initialize Streamlit app
-input_prompt = """
-You are an expert nutritionist. Analyze the food items in the image and 
-calculate the rough total calories. Even if u are unable to provide just give rough estimates.Provide details of each food item and their count if possible  with 
-their calories in the following format:
-1. item 1 - number of calories
-2. item 2 - number of calories
-...
+input_prompt="""
+You are an expert nutritionist. Analyze the food items in the image and estimate their rough total calories. List each food item along with its approximate calories in the following format:
+
+1. [food item] - [calories],
+2. [food item] - [calories],
+Total=add all 
+
+Only include other nutritional values (e.g., fat, protein, carbs) if specifically requested by the user. Provide rough estimates even if exact measurements are unclear, and do not include any warnings or additional notes.
+If other nutritional values is asked like,vitamin,protein,fats give overall for the whole dish only for the nutrition asked dont give all.
 """
 
-# Model deployment using Streamlit
-st.set_page_config(page_title="AI Nutritionist App", layout="wide", initial_sidebar_state="expanded")
 
+# Model deployment using Streamlit
 st.markdown(
     """
     <style>
@@ -75,7 +79,7 @@ st.sidebar.subheader("Contact")
 st.sidebar.write("For any questions or feedback, please contact us at rohanmallick016e@gmail.com")
 
 st.sidebar.markdown("---")
-st.sidebar.write("Made  by Rohan")
+st.sidebar.write("Made by Rohan")
 
 st.markdown(
     """
@@ -120,7 +124,7 @@ submit = st.button("Tell me the total calories")
 if submit:
     try:
         image_data = input_image_setup(uploaded_file)
-        response = get_gemini_response(input_text, image_data, input_prompt)
+        response = get_gemini_response(input_prompt, image_data, input_text)
         st.subheader("The response is:")
         st.write(response)
     except Exception as e:
