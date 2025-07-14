@@ -1,5 +1,5 @@
 # This was my mini project based on using generative ai for detecting calories in food realtime.
-##The AI Calorie Counter is designed to identify food items from images and provide accurate nutritional information. Below are the results and discussions of various scenarios where the system was tested, demonstrating its effectiveness and reliability.
+## The AI Calorie Counter is designed to identify food items from images and provide accurate nutritional information. Below are the results and discussions of various scenarios where the system was tested, demonstrating its effectiveness and reliability.
 
 ### 1. Detecting Single Food Item:
 The system successfully identified a single apple from the image and provided detailed nutritional information
