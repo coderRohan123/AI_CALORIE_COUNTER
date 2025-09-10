@@ -129,9 +129,13 @@ You are a world-class food scientist AI. Your task is to perform a comprehensive
 
 1.  **Meal Title:** A descriptive title. Format: `Meal Title: [Your Title]`
 
-2.  **Human-Readable Analysis:** A paragraph describing the meal, its components, and a general health assessment.
+2.  Provide a brief analysis with the following content (do not include section headers):
+    - **Advantages:** 2-3 health benefits of this food
+    - **Disadvantages:** 1-2 potential concerns or limitations
+    
+    ***Fun Fact:*** One interesting fact about this food (format this exactly as shown with triple asterisks for bold italic)
 
-3.  **Nutritional Data JSON:** A valid JSON array of objects, enclosed in triple backticks.
+3.  Provide the nutritional data as a valid JSON array of objects, enclosed in triple backticks (do not include any text before the JSON).
     **CRITICAL RULE:** You MUST provide a value for EVERY nutrient in the list below. If the meal does not contain a nutrient or if data is unavailable, you MUST include it with an `amount` of 0. Do not omit any nutrient from this list.
 
     ```json
@@ -229,24 +233,42 @@ if 'current_analysis' not in st.session_state:
 def render_analyzer_page():
     st.title("AI Nutrition Analyzer")
     st.markdown("Upload a picture of your meal for a complete A-to-Z nutritional breakdown.")
-    uploaded_file = st.file_uploader("Upload Your Meal Image...", type=["jpg", "jpeg", "png"])
-    if st.button("Analyze Meal", type="primary"):
-        if uploaded_file:
-            with st.spinner("Performing deep nutritional analysis... This may take a moment."):
-                try:
-                    image_api_data = setup_image_for_api(uploaded_file)
-                    response_text = get_gemini_response(image_api_data, input_prompt)
-                    st.session_state['current_analysis'] = parse_summary_from_response(response_text)
-                except Exception as e:
-                    st.error(f"An error occurred: {e}"); st.session_state['current_analysis'] = None
-        else: st.warning("Please upload an image first.")
-
+    
+    # Create two columns for layout
+    col1, col2 = st.columns([1, 1])
+    
+    with col1:
+        st.markdown("### 📤 Upload & Analysis")
+        st.info("💡 **How it works:** Upload a photo of your meal and click 'Analyze' to get detailed nutritional information powered by AI.")
+        uploaded_file = st.file_uploader("Upload Your Meal Image...", type=["jpg", "jpeg", "png"])
+        
+        if st.button("Analyze Meal", type="primary"):
+            if uploaded_file:
+                with st.spinner("Performing deep nutritional analysis... This may take a moment."):
+                    try:
+                        image_api_data = setup_image_for_api(uploaded_file)
+                        response_text = get_gemini_response(image_api_data, input_prompt)
+                        st.session_state['current_analysis'] = parse_summary_from_response(response_text)
+                    except Exception as e:
+                        st.error(f"An error occurred: {e}"); st.session_state['current_analysis'] = None
+            else: st.warning("Please upload an image first.")
+    
+    with col2:
+        # Display the uploaded image on the right side in medium size
+        if uploaded_file is not None:
+            image = Image.open(uploaded_file)
+            st.image(image, caption="Your Meal Image", width=350)
+        else:
+            st.info("Upload an image to see preview here")
     if st.session_state['current_analysis']:
-        st.divider(); st.subheader("Analysis Result")
+        st.divider()
+        st.subheader("🍽️ Analysis Results")
+        st.info("🤖 **AI Analysis:** Below you'll find the meal identification, nutritional breakdown, and complete vitamin/mineral profile detected from your image.")
+        
         analysis = st.session_state['current_analysis']
         st.markdown(f"### {analysis.get('title')}")
         
-        # Display the human-readable analysis text
+        # Display the brief analysis text
         response_parts = analysis['full_text'].split('```json')
         if response_parts:
             # Get the text before the JSON section
@@ -258,7 +280,7 @@ def render_analyzer_page():
 
         if analysis['nutrients']:
             df = pd.DataFrame(analysis['nutrients']).fillna(0)
-            st.markdown("#### Complete Nutritional Profile")
+            st.markdown("#### 📊 Complete Nutritional Profile")
             st.dataframe(df, width='stretch', height=500)
             
         if st.session_state['logged_in']:
@@ -288,11 +310,13 @@ def render_dashboard_page():
         st.info("No data found for this period. Analyze and save a meal to get started!"); return
 
     st.subheader(f"Data for: {selected_range_key}")
+    st.info("📈 **Dashboard Overview:** Your nutritional data is summarized below. Charts show proportions and trends, while metrics display totals for the selected time period.")
     
     col1, col2 = st.columns(2)
     
     with col1:
-        st.markdown("#### Macronutrient Distribution")
+        st.markdown("#### 🍞 Macronutrient Distribution")
+        st.caption("💡 Shows how your calories are distributed across protein, carbs, and fats as percentages.")
         # Get actual calories from database - this is the source of truth
         calories_df = df[df['nutrient_name'] == 'Calories']
         macros = ['Protein', 'Total Fat', 'Carbohydrates']
@@ -342,7 +366,8 @@ def render_dashboard_page():
             st.info("No calorie or macronutrient data for this period.")
 
     with col2:
-        st.markdown("#### Vitamins Breakdown")
+        st.markdown("#### 🍊 Vitamins Breakdown")
+        st.caption("💡 Displays the distribution of essential vitamins you've consumed from your meals.")
         vitamins = ['Vitamin A', 'Vitamin C', 'Vitamin D', 'Vitamin E', 'Vitamin K', 
                    'Thiamin (B1)', 'Riboflavin (B2)', 'Niacin (B3)', 'Vitamin B6', 
                    'Folate (B9)', 'Vitamin B12']
@@ -385,7 +410,8 @@ def render_dashboard_page():
         else: st.info("No vitamin data for this period.")
     
     # Move the key nutrient totals to a new row
-    st.markdown("#### Key Nutrient Totals")
+    st.markdown("#### 🔢 Key Nutrient Totals")
+    st.caption("💡 Your total intake of essential nutrients over the selected time period.")
     col3, col4, col5 = st.columns(3)
     with col3:
         key_nutrients = ['Calories', 'Protein']
@@ -425,8 +451,8 @@ def render_dashboard_page():
 
     st.divider()
     
-    st.subheader("Recent Meals History")
-    st.markdown("Here are the meals you've analyzed and saved:")
+    st.subheader("📅 Recent Meals History")
+    st.info("🍽️ **Meal History:** All the meals you've analyzed and saved are listed below with dates and times.")
     
     # Get unique meals with their details
     meals_query = """
@@ -464,8 +490,8 @@ def render_dashboard_page():
 
     st.divider()
     
-    st.subheader("Nutrient Intake Over Time")
-    st.markdown("Select specific nutrients to see a trend chart of your daily consumption.")
+    st.subheader("📈 Nutrient Intake Over Time")
+    st.info("📉 **Trend Analysis:** Select nutrients below to see how your daily intake changes over time. Great for tracking consistency!")
     all_nutrients = sorted(df['nutrient_name'].unique())
     
     selected_nutrients = st.multiselect("Select nutrients to chart:", all_nutrients, default=['Calories', 'Protein'])
