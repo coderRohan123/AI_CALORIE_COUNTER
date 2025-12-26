@@ -614,6 +614,10 @@ with st.sidebar:
                     else:
                         st.warning("⚠️ Please fill in all fields")
 
+    # Add the "Made with ❤️ by Rohan and Nithin" text at the bottom of the sidebar
+    st.markdown("---")
+    st.markdown("<div style='text-align: center; padding: 10px;'>\n                <p style='color: #888; font-size: 12px;'>Made with ❤️ by Rohan and Nithin</p>\n                </div>", unsafe_allow_html=True)
+
 if st.session_state.page == 'Analyzer':
     render_analyzer_page()
 elif st.session_state.page == 'Dashboard':
